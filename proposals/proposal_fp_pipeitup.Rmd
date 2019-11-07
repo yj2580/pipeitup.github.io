@@ -8,9 +8,9 @@ output: github_document
 Mental illnesses are common in the United States. According to the National Institute of Mental Health,  in 2017, about one in five U.S. adults live with mental illness. As future technicians, we are wondering the prevalence and determinants of mental illness in the tech companies, which has barely been extensively studied.
 
 #### Research interests:
-Examining the changes in prevalence of mental illness in recent 3 years / across regions / gender / age / complications between mental illness?
-Does your employer provide resources to learn more about mental health issues and how to seek help reflects the society’s attitude towards mental illness?
-Building classification model to predict mental illness status.
+1）Examining the difference in prevalence of mental illness across years / regions / gender / age / complications between mental illness.
+2) Examine society’s attitude towards mental illness. 
+3) Building classification model to predict mental illness status.
 
 #### The anticipated data sources:
 OSMI Mental Health Survey in Tech Survey. You can find this dataset from [here](https://osmihelp.org/research). This survey is an annual survey regarding mental health of people in tech companies conducted by Open Source Mental Illness (OSMI),  a non-profit organization. We will employ the most recent 3 years’ data (i.e. 2016-2018).
@@ -23,7 +23,7 @@ Some of the data were entered by participants themselves so the data include the
 
 #### The planned timeline
 - Nov. 11 Data cleaning 
-- Nov 15 Get the EDA part done
-- Nov 25 Finish interested questions 
-- Dec 1 roughly done
-- Dec 4 finish webpage
+- Nov. 15 Get the EDA part done
+- Nov. 25 Finish interested questions 
+- Dec. 1 roughly done
+- Dec. 4 finish webpage

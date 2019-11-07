@@ -15,12 +15,10 @@ which has barely been extensively studied.
 
 #### Research interests:
 
-Examining the changes in prevalence of mental illness in recent 3 years
-/ across regions / gender / age / complications between mental illness?
-Does your employer provide resources to learn more about mental health
-issues and how to seek help reflects the society’s attitude towards
-mental illness? Building classification model to predict mental illness
-status.
+1）Examining the difference in prevalence of mental illness across years
+/ regions / gender / age / complications between mental illness. 2)
+Examine society’s attitude towards mental illness. 3) Building
+classification model to predict mental illness status.
 
 #### The anticipated data sources:
 
@@ -54,7 +52,7 @@ the most recent 3 years’ data (i.e. 2016-2018).
 #### The planned timeline
 
   - Nov. 11 Data cleaning
-  - Nov 15 Get the EDA part done
-  - Nov 25 Finish interested questions
-  - Dec 1 roughly done
-  - Dec 4 finish webpage
+  - Nov. 15 Get the EDA part done
+  - Nov. 25 Finish interested questions
+  - Dec. 1 roughly done
+  - Dec. 4 finish webpage
