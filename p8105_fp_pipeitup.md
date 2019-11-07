@@ -3,16 +3,16 @@ Final Project Proposal
 Yingxi Ji, Yeqing Ji, Wurongyan Zhang, Yiling Yang, Yanni Wang
 11/6/2019
 
-#### 1\. Anticipated title:
+#### Anticipated title:
 
 Prevalence trend and Determinants of Mental Illness in Tech Company
 
-#### 2\. Team members:
+#### Team members:
 
 Yingxi Ji (yj2579), Yeqing Ji (yj2580), Wurongyan Zhang (wz2507), Yiling
 Yang (yy3018), Yanni Wang (yw3439)
 
-#### 3\. Motivation:
+#### Motivation:
 
 Mental illnesses are common in the United States. According to the
 National Institute of Mental Health, in 2017, about one in five U.S.
@@ -20,7 +20,7 @@ adults live with mental illness. As future technicians, we are wondering
 the prevalence and determinants of mental illness in the tech companies,
 which has barely been extensively studied.
 
-#### 4\. Anticipated dataset:
+#### Anticipated dataset:
 
 The anticipated dataset is OSMI Mental Health Survey in Tech Survey,
 which can be found at <https://osmihelp.org/research>. This survey is an
@@ -29,7 +29,7 @@ conducted by Open Source Mental Illness (OSMI), a non-profit
 organization. We will employ the most recent 3 years’ data
 (i.e. 2016-2018).
 
-#### 5\. Research interests:
+#### Research interests:
 
   - Examining the changes in prevalence of mental illness in recent 3
     years / across regions / gender / age / complications between mental
@@ -39,7 +39,7 @@ organization. We will employ the most recent 3 years’ data
     towards mental illness?
   - Building classification model to predict mental illness status.
 
-#### 6\. Data plan:
+#### Data plan:
 
 Planned analyses begin with data cleaning and EDA. This step includes
 visualization, possibly interactive, by using graphs such as bar graphs,
@@ -70,7 +70,7 @@ Cleaning data will be challenges since the data is categorical outcomes.
 Some of the data were entered by participants themselves so the data
 include the problem of misclassification.
 
-#### 7\. The planned timeline:
+#### The planned timeline:
 
   - Nov. 11: Data cleaning
 
