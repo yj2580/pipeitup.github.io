@@ -24,8 +24,7 @@ osmi2016 <- read_csv("data/osmi2016.csv")
 
 ```{r}
 
-# Previous: 1) Data is more comprehensive 2) Based on experience
-
+# Previous: 1) Data is more comprehensive 2) Based on facts
 # Question 1: Examining the difference in prevalence of mental illness across types of company/ years / regions / gender / age / 
 
 # [3][4][4] "Is your employer primarily a tech company/organization?"  
