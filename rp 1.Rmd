@@ -1,0 +1,11 @@
+---
+title: "report 1"
+author: "Wurongyan Zhang"
+date: "11/10/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
