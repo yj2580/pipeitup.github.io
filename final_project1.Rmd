@@ -1,6 +1,6 @@
 ---
-title: "final_project1"
-author: "Yingxi Ji"
+title: "Final Project Proposal: Prevalence trend and Determinants of Mental Illness in Tech Company"
+author: "Yingxi Ji (yj2579), Yeqing Ji (yj2580),  Wurongyan Zhang (wz2507), Yiling Yang (yy3018), Yanni Wang (yw3439)"
 date: "11/10/2019"
 output: html_document
 ---
@@ -9,3 +9,20 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r,message=FASLE,warning=FALSE}
+# library import
+library(tidyverse)
+```
+
+
+```{r,message=FALSE,warning=FALSE}
+# Data import
+osmi2018 <- read_csv("data/osmi2018.csv")
+osmi2017 <- read_csv("data/osmi2017.csv")
+osmi2016 <- read_csv("data/osmi2016.csv")
+```
+
+
+```{r}
+colnames(osmi2018)
+```
