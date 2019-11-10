@@ -1,0 +1,71 @@
+---
+title: "Final Project Proposal: Prevalence trend and Determinants of Mental Illness in Tech Company"
+author: "Yingxi Ji (yj2579), Yeqing Ji (yj2580),  Wurongyan Zhang (wz2507), Yiling Yang (yy3018), Yanni Wang (yw3439)"
+date: "11/10/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r,message=FASLE,warning=FALSE}
+# library import
+library(tidyverse)
+```
+
+
+```{r,message=FALSE,warning=FALSE}
+# Data import
+osmi2018 <- read_csv("data/osmi2018.csv")
+osmi2017 <- read_csv("data/osmi2017.csv")
+osmi2016 <- read_csv("data/osmi2016.csv")
+```
+
+```{r}
+
+# Previous: 1) Data is more comprehensive 2) Based on experience
+
+# Question 1: Examining the difference in prevalence of mental illness across types of company/ years / regions / gender / age / 
+
+# [3] "Is your employer primarily a tech company/organization?"  
+# Years
+# [60] "What country do you work in?"  & [61] "What US state or territory do you work in?"   
+# [57] "What is your gender?" 
+# [56] "What is your age?"  
+
+
+# 2) Examine society’s attitude towards mental illness. 
+
+# [26] "Have your previous employers provided mental health benefits?"     
+# [28] "Did your previous employers ever formally discuss mental health (as part of a wellness campaign or other official communication)?" 
+# [30] "Was your anonymity protected if you chose to take advantage of mental health or substance abuse treatment resources with previous employers?" 
+# [31] "Do you think that discussing a mental health disorder with previous employers would have negative consequences?"  
+# [35] "Did you feel that your previous employers took mental health as seriously as physical health?"  
+# [36] "Did  you hear of or observe negative consequences for co-workers with mental health issues in your previous workplaces?"
+# [39] "Would you bring up a mental health issue with a potential employer in an interview?"    
+# [41] "Do you feel that being identified as a person with a mental health issue would hurt your career?" 
+# [42] "Do you think that team members/co-workers would view you more negatively if they knew you suffered from a mental health issue?" 
+# [43] "How willing would you be to share with friends and family that you have a mental illness?"    
+# [44] "Have you observed or experienced an unsupportive or badly handled response to a mental health issue in your current or previous workplace?"   
+# [54] "If you have a mental health issue, do you feel that it interferes with your work when being treated effectively?"                                                                
+# [55] "If you have a mental health issue, do you feel that it interferes with your work when NOT being treated effectively?"  
+
+
+# 3) Building classification model to predict mental illness status.
+
+# [46] "Do you have a family history of mental illness?"  
+# [47] "Have you had a mental health disorder in the past?"   
+# [51] "Have you been diagnosed with a mental health condition by a medical professional?" 
+
+# 4) Complications between mental illness. 
+
+# [51] "Have you been diagnosed with a mental health condition by a medical professional?" 
+# [52] "If so, what condition(s) were you diagnosed with?"      
+
+```
+
+```{r}
+colnames(osmi2016)
+colnames(osmi2018)
+```
