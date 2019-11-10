@@ -50,6 +50,7 @@ osmi2016 <- read_csv("data/osmi2016.csv")
 # [44] "Have you observed or experienced an unsupportive or badly handled response to a mental health issue in your current or previous workplace?"   
 # [54] "If you have a mental health issue, do you feel that it interferes with your work when being treated effectively?"                                                                
 # [55] "If you have a mental health issue, do you feel that it interferes with your work when NOT being treated effectively?"  
+# [63] "Do you work remotely?"  
 
 
 # 3) Building classification model to predict mental illness status.
