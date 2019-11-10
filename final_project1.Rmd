@@ -28,16 +28,16 @@ osmi2016 <- read_csv("data/osmi2016.csv")
 
 # Question 1: Examining the difference in prevalence of mental illness across types of company/ years / regions / gender / age / 
 
-# [3] "Is your employer primarily a tech company/organization?"  
+# [3][4][4] "Is your employer primarily a tech company/organization?"  
 # Years
-# [60] "What country do you work in?"  & [61] "What US state or territory do you work in?"   
-# [57] "What is your gender?" 
-# [56] "What is your age?"  
+# [60][119][120] "What country do you work in?"  & [61] "What US state or territory do you work in?"   
+# [57][114][114] "What is your gender?" 
+# [56][113][113] "What is your age?"  
 
 
 # 2) Examine society’s attitude towards mental illness. 
 
-# [26] "Have your previous employers provided mental health benefits?"     
+# [26][33][33] "Have your previous employers provided mental health benefits?"     
 # [28] "Did your previous employers ever formally discuss mental health (as part of a wellness campaign or other official communication)?" 
 # [30] "Was your anonymity protected if you chose to take advantage of mental health or substance abuse treatment resources with previous employers?" 
 # [31] "Do you think that discussing a mental health disorder with previous employers would have negative consequences?"  
