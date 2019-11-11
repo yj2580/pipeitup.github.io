@@ -34,32 +34,38 @@ osmi2016 <- read_csv("data/osmi2016.csv")
 # [56][113][113] "What is your age?"  
 
 
-# 2) Examine society’s attitude towards mental illness. 
-
+# 2) Examine how external attitudes towards mental illness reflects personal perception or behaviors.
+#### design matrix  - external environment
 # [26][33][33] "Have your previous employers provided mental health benefits?"     
-# [28] "Did your previous employers ever formally discuss mental health (as part of a wellness campaign or other official communication)?" 
-# [30] "Was your anonymity protected if you chose to take advantage of mental health or substance abuse treatment resources with previous employers?" 
-# [31] "Do you think that discussing a mental health disorder with previous employers would have negative consequences?"  
-# [35] "Did you feel that your previous employers took mental health as seriously as physical health?"  
-# [36] "Did  you hear of or observe negative consequences for co-workers with mental health issues in your previous workplaces?"
-# [39] "Would you bring up a mental health issue with a potential employer in an interview?"    
-# [41] "Do you feel that being identified as a person with a mental health issue would hurt your career?" 
-# [42] "Do you think that team members/co-workers would view you more negatively if they knew you suffered from a mental health issue?" 
-# [43] "How willing would you be to share with friends and family that you have a mental illness?"    
-# [44] "Have you observed or experienced an unsupportive or badly handled response to a mental health issue in your current or previous workplace?"   
-# [54] "If you have a mental health issue, do you feel that it interferes with your work when being treated effectively?"                                                                
-# [55] "If you have a mental health issue, do you feel that it interferes with your work when NOT being treated effectively?"  
-# [63] "Do you work remotely?"  
+# [28][35][35] "Did your previous employers ever formally discuss mental health (as part of a wellness campaign or other official communication)?" 
+# [35][47/48][47/48] "Did you feel that your previous employers took mental health as seriously as physical health?"
+# [30][37][37] "Was your anonymity protected if you chose to take advantage of mental health or substance abuse treatment resources with previous employers?" 
+# [44][105][105] "Have you observed or experienced an unsupportive or badly handled response to a mental health issue in your current or previous workplace?" 
+
+#### response :
+# [39][99][99] "Would you bring up a mental health issue with a potential employer in an interview?"  
+# [42][104][104] "Do you think that team members/co-workers would view you more negatively if they knew you suffered from a mental health issue?"
+
+
+#### Others    
+# [54][93][93] "If you have a mental health issue, do you feel that it interferes with your work when being treated effectively?"
+# [55][94][94] "If you have a mental health issue, do you feel that it interferes with your work when NOT being treated effectively?"
 
 
 # 3) Building classification model to predict mental illness status.
+#### Design matrix:
+# [46][92][92] "Do you have a family history of mental illness?" 
+# [57][114][114] "What is your gender?" 
+# [56][113][113] "What is your age?"
+# [3][4][4] "Is your employer primarily a tech company/organization?"
+# [1][2][2] "Are you self-employed?"
+# [4][5][5] "Is your primary role within your company related to tech/IT?" *too many NAs
+# [2][3][3] "How many employees does your company or organization have?"
 
-# [46] "Do you have a family history of mental illness?"  
-# [47] "Have you had a mental health disorder in the past?"   
-# [51] "Have you been diagnosed with a mental health condition by a medical professional?" 
+#### Response:  
+# [48][49][49] "Do you currently have a mental health disorder?" 
 
 # 4) Complications between mental illness. 
-
 # [51] "Have you been diagnosed with a mental health condition by a medical professional?" 
 # [52] "If so, what condition(s) were you diagnosed with?"      
 
@@ -67,5 +73,6 @@ osmi2016 <- read_csv("data/osmi2016.csv")
 
 ```{r}
 colnames(osmi2016)
+colnames(osmi2017)
 colnames(osmi2018)
 ```
