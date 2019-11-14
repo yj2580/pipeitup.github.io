@@ -1,0 +1,115 @@
+---
+title: "eda"
+author: "Yingxi Ji"
+date: "11/14/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(broom)
+```
+
+# Data cleaning
+```{r}
+master_2 <- read_csv("~/Desktop/master 2.csv") 
+
+  maindata = master_2 %>% 
+  janitor::clean_names() %>%
+  select(-(`hdi_for_year`)) %>%
+  mutate(suicideRate = (suicides_no/population)*100, 
+         country = as.factor(country),
+         age=str_remove(age,"years"),
+         gdp_for_year = as.numeric(gsub(",","",gdp_for_year)),
+         age_group=as.factor(age),
+         suicides_no = as.numeric(suicides_no),
+         population = as.numeric(population))
+  
+```
+
+Dropped HDI since this is a index that caclculated every 5 yrs and there are too many missing value. 
+
+## EDA
+```{r}
+library(corrplot)
+corr_data = maindata %>% 
+  select(-c(1,3,4,8,9,12,13)) 
+corr= cor(corr_data)
+corrplot(corr, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+```
+
+## suicide rate accross the age group
+```{r}
+maindata %>% 
+ggplot(aes(x = suicideRate, fill = age, alpha = 0.5)) + 
+geom_histogram() + 
+facet_wrap(~age) +
+labs(title = "Distribution of suicide rates across age groups", x = "Suicide rates")
+```
+
+comment:Lots of countries having low suicide rates for the youngest age group; some countries have high suicide rates when it comes to the older age groups.
+
+## Suicide rates over time
+```{r}
+maindata %>%
+  group_by(year) %>%
+  summarize(population = sum(population), 
+            suicides = sum(suicides_no), 
+            suicides_per_100k = (suicides / population) * 100000) %>%
+  ggplot(aes(x = year, y = suicides_per_100k, group=1)) + 
+  geom_line(col = "deepskyblue3", size = 1) + 
+  geom_point(col = "deepskyblue3", size = 2) + 
+  labs(title = "Global Suicides (per 100k)",
+       subtitle = "Trend over time, 1985 - 2015.",
+       x = "Year", 
+       y = "Suicides per 100k") 
+```
+
+## trend with sex
+
+```{r}
+maindata%>%
+  group_by(year, sex) %>%
+  summarize(suicide_per_100k = (sum(as.numeric(suicides_no)) / sum(as.numeric(population))) * 100000) %>%
+  ggplot(aes(x = year, y = suicide_per_100k, col = factor(sex))) + 
+  facet_grid(sex ~ ., scales = "free_y") + 
+  geom_line() + 
+  geom_point() + 
+  labs(title = "Trends Over Time, by Sex", 
+       x = "Year", 
+       y = "Suicides per 100k", 
+       color = "Sex") + 
+  theme(legend.position = "none") + 
+  scale_x_continuous(breaks = seq(1985, 2015, 5), minor_breaks = F)
+```
+
+## trend with age
+
+```{r}
+maindata %>% 
+ggplot(aes(year, suicideRate, color = age)) +
+geom_smooth(method = "lm") +
+labs(y = "Suicide rate", title = "Suicide rates over time")
+```
+
+Suicide rates for the youngest age group nearly constant  and low over time. The rate drops but it may caused by decrease in population. 
+
+## suicide rate with living standard 
+
+```{r}
+maindata%>% 
+group_by(country) %>% 
+summarize(count = n(), medianSuicides = median(suicides_no))  %>% 
+mutate(country = fct_reorder(country, medianSuicides)) %>% 
+top_n(20) %>% 
+ungroup() %>% 
+ggplot(aes(country, medianSuicides)) + 
+geom_col(aes(fill = country)) +
+coord_flip() +
+labs(title = "Median number of suicides per country", x = "Country", y = "Median suicides") 
+```
+
+Since we see that both US and Japan have high median suicide, the standard living and suicides have a negative relationship. 
