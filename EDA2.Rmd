@@ -109,7 +109,7 @@ ungroup() %>%
 ggplot(aes(country, medianSuicides)) + 
 geom_col(aes(fill = country)) +
 coord_flip() +
-labs(title = "Median number of suicides per country", x = "Country", y = "Median suicides") 
+labs(title = "Median number of suicides per country", x = "Country", y = "Median suicides")
 ```
 
 Since we see that both US and Japan have high median suicide, the standard living and suicides have a negative relationship. 
