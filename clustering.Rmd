@@ -42,6 +42,7 @@ dist_subset1 <- dist(scale(subset1))
 
 #visualizing pair-wise distances
 hist(dist_subset1)
+
 ```
 
 The histogram below shows that a Euclidean distance of two is the most frequent distance among the pairwise distances.
