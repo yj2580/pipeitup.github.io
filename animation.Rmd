@@ -1,0 +1,44 @@
+---
+title: "Animation example"
+author: "Yiling Yang"
+date: "11/21/2019"
+output: html_document
+---
+
+Everything below is necessary
+DO NOT remove anything
+
+Check out animation for other graphs such  as line graph (here)[https://www.datanovia.com/en/blog/gganimate-how-to-create-plots-with-beautiful-animation-in-r/]
+
+```{r setup, include=FALSE,message=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(viridis)
+library(plotly)
+library(R.utils)
+library(gganimate)
+library(gifski)
+
+maindata <- read_csv("maindata.csv")
+```
+
+```{r}
+  
+graph2_data <- maindata %>% group_by(year,gdp_per_capita,country) %>% summarize(total_num=sum(suicides_no))
+    
+
+p<-ggplot(graph2_data, aes(x = gdp_per_capita, y=total_num, size = total_num, colour = country)) +
+    geom_point(show.legend = FALSE, alpha = 0.7) +
+    scale_color_viridis_d() +
+    scale_size(range = c(2, 12)) +
+    scale_x_log10() +
+    labs(x = "GDP per capita", y = "Number of Suicides")
+
+p + transition_time(year) + labs(title = "Year: {frame_time}")
+```
+
+
+
+
+
+

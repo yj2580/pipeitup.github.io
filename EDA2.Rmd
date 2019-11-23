@@ -231,6 +231,7 @@ modelus=lm(log_suicide~gdp_for_year+sex+age_group+gdp_per_capita, data = us)
 
 summary(modelus)
 plot(modelus)
+
 # prediction for 25-34 male suicide rate in US
 sqrt(log(2.14*(10^13))*(-0.059)+1*0.07176+0.01109+65112*0.000001792+1.648)
 

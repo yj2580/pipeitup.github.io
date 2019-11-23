@@ -1,0 +1,202 @@
+---
+title: "Clustering"
+author: "Yingxi Ji"
+date: "11/22/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(broom)
+library(plotly)
+library(rworldmap)
+```
+
+```{r}
+master_2 <- read.csv("~/Desktop/master 2.csv") 
+
+  maindata = master_2 %>% 
+  janitor::clean_names() %>%
+  select(-("hdi_for_year")) %>%
+  mutate(suicideRate = (suicides_no/population)*100, 
+         country = as.factor(country),
+         age=str_remove(age,"years"),
+         gdp_for_year = as.numeric(gsub(",","",gdp_for_year)),
+         age_group=as.factor(age), 
+         suicides_no = as.numeric(suicides_no),
+         population = as.numeric(population),
+         sex = as.factor(sex),
+         generation = as.factor(generation))
+  
+
+```
+
+
+```{r}
+subset1 <- maindata %>%
+  na.omit() %>%
+  select(suicides_no, `suicides_100k_pop`, `gdp_for_year`, `gdp_per_capita`)
+dist_subset1 <- dist(scale(subset1))
+
+#visualizing pair-wise distances
+hist(dist_subset1)
+
+```
+
+The histogram below shows that a Euclidean distance of two is the most frequent distance among the pairwise distances.
+
+
+```{r}
+hclust_subset1 <- hclust(dist_subset1, method = "complete")
+
+library(dendextend)
+
+subset1_dendrogram <- as.dendrogram(hclust_subset1)
+
+subset1_dendrogram_color <- color_branches(subset1_dendrogram, h = 8)
+
+#extract cluster group
+cluster <- cutree(hclust_subset1, k=4)
+
+#add cluster group values to observations
+subset2 <- maindata %>% mutate(cluster = cluster)
+
+
+plot(subset1_dendrogram_color)
+
+```
+
+It is hard to determine how many clusters we should use since the data set is huge. I chose k = 4 for now, subjected to change in the further analysis.
+
+
+I analyzed the various combinations of pairwise distances using 2D plots. I selected variables by analyzing the form and strength of various bivariate relationships. 
+
+The relationship between the variables Number of Suicides and GDP for Year had the strongest association of all other bivariate relationships, it is shown below.
+```{r}
+subset2_lr <- ggplot(subset2, aes(x = `gdp_for_year`, y = suicides_no)) +
+              geom_point() +
+              geom_smooth(method = "lm", se = FALSE) +
+              scale_y_log10() +
+              scale_x_log10()
+subset2_lr
+```
+
+```{r}
+subset2_plot <- ggplot(subset2, aes(y=suicides_no, x=`gdp_for_year`, color = factor(cluster))) +
+                geom_point() +
+                geom_smooth(method = "lm", se = FALSE)
+
+subset2_plot
+```
+
+Using the selected variables (Number of Suicides and GDP for Year), I constructed plot to visualize the clusters. Regression lines were added for each cluster to demonstrate how the variables are related within each cluster. 
+
+Since now we have 4 clusters, we should zoom in to see details in each cluster.
+
+## cluster 1 
+```{r}
+cluster1 <- subset2 %>%
+                filter(cluster ==  1) %>% 
+                     ggplot(aes(x = suicides_no, y = `gdp_for_year ($)`, color = sex)) +
+                         geom_point() +
+                         scale_y_log10() +
+                         scale_x_log10()
+```
+
+Most Suicide victims are in this cluster and their is no unique profiling element based on the data we have.
+
+## cluster 2 
+
+```{r}
+cluster2_country <- subset2 %>%
+                filter(cluster ==  2) %>%
+                    ggplot(aes(y = suicides_no, x = `gdp_for_year`, color = `country`)) +
+                        geom_point()+
+                        scale_y_log10() +
+                        scale_x_log10() +
+                        ggtitle("Cluster 2 GDP ~ No. of Suicides by Country")
+cluster2_country
+
+
+cluster2_age <- subset2 %>%
+                filter(cluster ==  2) %>%
+                    ggplot(aes(y = suicides_no, x = `gdp_for_year`, color = `age`)) +
+                        geom_point()+
+                        scale_y_log10() +
+                        scale_x_log10() +
+                        ggtitle("Cluster 2 GDP ~ No. of Suicides by Age")
+cluster2_age
+
+```
+
+
+Victims in Cluster 2 are from Japan, Ukraine, and the United States.
+Ukraine victims have the lowest GDP for Year and Suicide Numbers of the three.
+
+They are all Male.
+
+Their ages range from 15-74, with the age group 35-54 having the greatest value in Number of Suicides.
+
+## cluster 3 
+
+```{r}
+cluster3_country <- subset2 %>% 
+                filter(cluster ==  3) %>%
+                    ggplot(aes(y = suicides_no, x = `gdp_for_year`, color = `country`)) +
+                        geom_point() +
+                          scale_y_log10() +
+                          ggtitle("Cluster 3 GDP ~ No. of Suicides by Country")
+
+cluster3_country
+
+cluster3_age <- subset2 %>% 
+                filter(cluster ==  3) %>%
+                    ggplot(aes(y = suicides_no, x = `gdp_for_year`, color = `age`)) +
+                        geom_point() +
+                          scale_y_log10() +
+                          ggtitle("Cluster 3 GDP ~ No. of Suicides by Age")
+
+cluster3_age
+
+
+```
+
+
+Victims in Cluster 3 are all from the United States.
+
+They are all Male.
+
+Their ages range from 35-74, with the age group 35-54 having the greatest number of observations.
+
+```{r}
+cluster4_country <- subset2 %>%
+                filter(cluster ==  4) %>%
+                    ggplot(aes(y = suicides_no, x = `gdp_for_year`, color = `country`)) +
+                        geom_point()+
+                        scale_y_log10() +
+                        scale_x_log10() +
+                        ggtitle("Cluster 4 GDP ~ No. of Suicides by country")
+cluster4_country
+
+cluster4_age <- subset2 %>%
+                filter(cluster ==  4) %>%
+                    ggplot(aes(y = suicides_no, x = `gdp_for_year`, color = `age`)) +
+                        geom_point()+
+                        scale_y_log10() +
+                        scale_x_log10() +
+                        ggtitle("Cluster 4 GDP ~ No. of Suicides by age")
+cluster4_age
+```
+
+
+Victims in Cluster 4 are all from the United States.
+
+They are composed of Males and Females, however, the majority of victims in this cluster are Female.
+
+Their ages range from 15-75+, with the age group 24-34 having the greatest number of suicides between 2010 and 2014.
+
+
+    
+

@@ -1,0 +1,203 @@
+---
+title: "Trend"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE,message=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(viridis)
+library(plotly)
+library(R.utils)
+
+
+maindata <- read_csv("maindata.csv") %>% filter(year!=2016)
+```
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+countries <-  maindata %>% distinct(country) %>% pull()
+countries <- insert(countries,1, "All")
+yr_group <-  maindata %>% distinct(yr_group) %>% pull() 
+yr_group <- insert(yr_group,1, "All")
+
+# selectInput widget
+selectInput(
+  "Country", 
+  label = h3("Country"),
+  choices = countries, selected = "United States")
+
+radioButtons(
+  "Metrics",
+  label = h3("Metrics"),
+  choices = c("Total Amount","Ratio"),selected = "Total Amount"
+)
+
+
+```
+
+<br>
+Here we provide a interactive page for you to explore the trend of suicides from 1985 to 2015. 
+
+- Country: countries in the data base.
+- Metrics: Measurement of suicide.
+
+<br>
+Note: There might be gaps in years depending on whether that country provided data.
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+### Overall Trend
+
+```{r}
+renderPlotly({
+  
+  if(input[["Metrics"]]=="Total Amount"){
+    
+    if(input[["Country"]]!="All"){
+     graph1_data <- maindata %>% filter(country==input[["Country"]])
+     graph1_data <- graph1_data %>% group_by(year) %>% summarize(total_per_year=sum(suicides_no))
+     }else{
+        graph1_data <- maindata %>% group_by(year) %>% summarize(total_per_year=sum(suicides_no))
+     }
+    
+    p <- graph1_data %>% ggplot(aes(x=year,y=total_per_year/1000)) +  geom_point(size=1.5) + 
+      geom_line() +
+      theme(axis.text.x = element_text(angle = 70)) +
+      ylab("Total suicides in (1k)") +
+      xlab("") +
+      scale_x_continuous(breaks = graph1_data$year)
+    
+  }else{
+    if(input[["Country"]]!="All"){
+     graph1_data <- maindata %>% filter(country==input[["Country"]])
+     graph1_data <- graph1_data %>% group_by(year) %>% summarize(total_per_year=sum(suicides_no)/sum(population))
+     }else{
+        graph1_data <- maindata %>% group_by(year) %>% summarize(total_per_year=sum(suicides_no)/sum(population))
+     }
+    
+      p <- graph1_data %>% ggplot(aes(x=year,y=total_per_year)) +  geom_point(size=1.5) + 
+       geom_line() +
+       theme(axis.text.x = element_text(angle = 70)) +
+       ylab("Suicide Ratio") +
+       xlab("") +
+       scale_x_continuous(breaks = graph1_data$year)
+  }
+      
+
+
+p  
+}
+)
+
+
+
+```
+
+### Trend by gender
+
+```{r}
+renderPlotly({
+  
+  if(input[["Metrics"]]=="Total Amount"){
+    if(input[["Country"]]!="All"){
+      graph1_data <- maindata %>% filter(country==input[["Country"]])
+      graph1_data <- graph1_data %>% group_by(sex,year) %>% summarize(total_per_year=sum(suicides_no))
+    }else{
+      graph1_data <- maindata %>% group_by(sex,year) %>% summarize(total_per_year=sum(suicides_no))
+    }
+    
+    p <- graph1_data %>% ggplot(aes(x=year,y=total_per_year/1000,color=sex)) + 
+      geom_line() + 
+      geom_point(size=1.5) +
+      theme(axis.text.x = element_text(angle = 70)) +
+      ylab("Total suicides in (1k)") +
+      xlab("") +
+      scale_x_continuous(breaks = graph1_data$year)
+    
+  }else{
+    
+    if(input[["Country"]]!="All"){
+      graph1_data <- maindata %>% filter(country==input[["Country"]])
+      graph1_data <- graph1_data %>% group_by(sex,year) %>% summarize(total_per_year=sum(suicides_no)/sum(population))
+    }else{
+      graph1_data <- maindata %>% group_by(sex,year) %>% summarize(total_per_year=sum(suicides_no)/sum(population))
+    }
+    
+      p <- graph1_data %>% ggplot(aes(x=year,y=total_per_year,color=sex)) + 
+      geom_line() + 
+      geom_point(size=1.5) +
+      theme(axis.text.x = element_text(angle = 70)) +
+      ylab("Suicide Ratio") +
+      xlab("") +
+      scale_x_continuous(breaks = graph1_data$year)
+  }
+     
+      
+p  
+}
+)
+
+
+```
+
+
+
+
+Column {data-width=500}
+-----------------------------------------------------------------------
+
+
+
+### Trend by age group
+
+```{r}
+renderPlotly({
+  
+  if(input[["Metrics"]]=="Total Amount"){
+    
+    if(input[["Country"]]!="All"){
+      graph1_data <- maindata %>% filter(country==input[["Country"]])
+      graph1_data <- graph1_data %>% group_by(age,year) %>% summarize(total_per_year=sum(suicides_no))
+    }else{
+      graph1_data <- maindata %>% group_by(age,year) %>% summarize(total_per_year=sum(suicides_no))
+    }
+    
+    p <- graph1_data %>% ggplot(aes(x=year,y=total_per_year/1000,color=age)) +
+      geom_bar(stat = "identity") +
+      ylab("Total suicides in (1k)") +
+      xlab("") +
+      scale_x_continuous(breaks = graph1_data$year)
+    p <- p + coord_flip()
+    
+  }else{
+    if(input[["Country"]]!="All"){
+      graph1_data <- maindata %>% filter(country==input[["Country"]])
+      graph1_data <- graph1_data %>% group_by(age,year) %>% summarize(total_per_year=sum(suicides_no)/sum(population))
+    }else{
+      graph1_data <- maindata %>% group_by(age,year) %>% summarize(total_per_year=sum(suicides_no)/sum(population))
+    }
+    
+    p <- graph1_data %>% ggplot(aes(x=year,y=total_per_year,color=age)) +
+      geom_bar(stat = "identity") +
+      ylab("Suicide Ratio") +
+      xlab("") +
+      scale_x_continuous(breaks = graph1_data$year)
+    p <- p + coord_flip()
+    
+  }
+      
+p  
+}
+)
+
+
+```
+
