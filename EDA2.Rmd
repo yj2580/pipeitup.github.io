@@ -196,10 +196,10 @@ plot(suicides_100k_pop~log(gdp_for_year), data=maindata)
 After correlation plots, we decided to keep the following variables:
 
 ```{r}
-maindata = maindata %>% 
+maindata_try = maindata %>% 
   mutate(log_suicide =log(suicides_100k_pop))
-maindata$log_suicide[is.infinite(maindata$log_suicide)]=0.01
-model1=lm(log_suicide~log(gdp_for_year)+year+sex+age_group+gdp_for_year+gdp_per_capita, data = maindata)
+maindata_try$log_suicide[is.infinite(maindata_try$log_suicide)]=0.01
+model1=lm(log_suicide~log(gdp_for_year)+year+sex+age_group+gdp_for_year+gdp_per_capita, data = maindata_try)
 
 plot(model1)
 summary(model1)
@@ -210,7 +210,7 @@ The residual is better for this model than the model for BSS.
 ## model by best subset selection
 
 ```{r}
-datatry= maindata %>% select(sex, age_group, suicides_no, log_suicide, gdp_for_year, gdp_per_capita, population)
+datatry= maindata_try %>% select(sex, age_group, suicides_no, log_suicide, gdp_for_year, gdp_per_capita, population)
 
 library(leaps)
 full_reg = regsubsets(log_suicide~., data= datatry)
@@ -225,7 +225,7 @@ plot(model_try)
 ### prediction for US
 
 ```{r}
-us=maindata %>% filter(country=="United States")
+us=maindata_try %>% filter(country=="United States")
 hist(us$log_suicide)
 modelus=lm(log_suicide~gdp_for_year+sex+age_group+gdp_per_capita, data = us)
 
@@ -233,7 +233,7 @@ summary(modelus)
 plot(modelus)
 
 # prediction for 25-34 male suicide rate in US
-sqrt(log(2.14*(10^13))*(-0.059)+1*0.07176+0.01109+65112*0.000001792+1.648)
+#sqrt(log(2.14*(10^13))*(-0.059)+1*0.07176+0.01109+65112*0.000001792+1.648)
 
 
 ```
@@ -281,10 +281,7 @@ ggplot(gdp_suicide_no_outliers, aes(x = gdp_per_capita, y = suicide_per_100k)) +
 
 There is weak positive relationship between GDP per capita and suicides per 100k after we removed outliers.
 
-```{r}
-library(splines2)
-fitSSpline <- smooth.spline( x = maindata$gdp_per_capita, y = maindata$log_suicide, cv = TRUE)
-```
+
 
 
 
