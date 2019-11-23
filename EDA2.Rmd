@@ -132,6 +132,7 @@ maindata %>%
 ggplot(aes(year, suicideRate, color = age)) +
 geom_smooth(method = "lm") +
 labs(y = "Suicide rate", title = "Suicide rates over time")
+
 ```
 
 Suicide rates for the youngest age group nearly constant  and low over time. The rate drops but it may caused by decrease in population. 
@@ -256,6 +257,7 @@ There is weak positive relationship between GDP per capita and suicides per 100k
 
 # suicide prevention link
 https://en.wikipedia.org/wiki/List_of_suicide_crisis_lines
+
 
 
 
