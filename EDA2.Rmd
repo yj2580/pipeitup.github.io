@@ -214,8 +214,24 @@ datatry= maindata_try %>% select(sex, age_group, suicides_no, log_suicide, gdp_f
 
 library(leaps)
 full_reg = regsubsets(log_suicide~., data= datatry)
-summary(full_reg)
+full_sum = summary(full_reg)
 
+
+```
+```{r}
+library(ggvis)
+rsq <- as.data.frame(full_sum$adjr2)
+names(rsq) <- "R2"
+rsq %>% 
+        ggvis(x=~ c(1:nrow(rsq)), y=~R2 ) %>%
+        layer_points(fill = ~ R2 ) %>%
+        add_axis("y", title = "R2") %>% 
+        add_axis("x", title = "Number of variables")
+
+plot(full_reg,scale="adjr2")
+```
+
+```{r}
 model_try = lm(log_suicide~sex+age_group+ suicides_no+ gdp_per_capita+ population, data = datatry)
 summary(model_try)
 plot(model_try)
@@ -280,6 +296,7 @@ ggplot(gdp_suicide_no_outliers, aes(x = gdp_per_capita, y = suicide_per_100k)) +
 ```
 
 There is weak positive relationship between GDP per capita and suicides per 100k after we removed outliers.
+
 
 
 
