@@ -160,6 +160,8 @@ Since we see that both US and Japan have high median suicide, the standard livin
 ### EDA
 ### correlation for numeric variables
 
+From the correlation plot on numeric variables, we can see that there are correlation between gdp for year, gdp per capita and population because the calculation of gdp per capita. Thus, in the model we included both gdp indicators but not the population because we think these two represents different things for comparison between countries.
+
 ```{r}
 library(corrplot)
 
@@ -177,12 +179,11 @@ hist(maindata$suicides_100k_pop)
 suicide = maindata %>% 
   mutate(suicides_100k_pop = suicides_100k_pop+1)
 
-hist(log(suicide$suicides_100k_pop))
 hist(log(maindata$suicides_100k_pop))
 plot(suicides_100k_pop~gdp_for_year, data=maindata)
 ```
 
-
+From the distribution plot of suicide_100k_pop, we can see that we need to transform it to satisfy the assumptions for linear model. we used log transformation and changed 0's to 0.01 for further calculations. Also, gdp_for_year needs transformation.
 
 ### transformed gdp_for_year 
 after saw the correlation plot above
@@ -199,6 +200,7 @@ After correlation plots, we decided to keep the following variables:
 maindata_try = maindata %>% 
   mutate(log_suicide =log(suicides_100k_pop))
 maindata_try$log_suicide[is.infinite(maindata_try$log_suicide)]=0.01
+
 model1=lm(log_suicide~log(gdp_for_year)+year+sex+age_group+gdp_for_year+gdp_per_capita, data = maindata_try)
 
 plot(model1)
@@ -218,6 +220,7 @@ full_sum = summary(full_reg)
 
 
 ```
+
 ```{r}
 library(ggvis)
 rsq <- as.data.frame(full_sum$adjr2)
@@ -230,6 +233,7 @@ rsq %>%
 
 plot(full_reg,scale="adjr2")
 ```
+By using $R^2$ as the criteria, BSS chose the model above.
 
 ```{r}
 model_try = lm(log_suicide~sex+age_group+ suicides_no+ gdp_per_capita+ population, data = datatry)
@@ -237,6 +241,7 @@ summary(model_try)
 plot(model_try)
 ```
 
+after selection r squared increased a little but the residual plot was worse than before. We can choose this model because the model only keeps one of the two indicators for GDP.
 
 ### prediction for US
 
@@ -253,7 +258,7 @@ plot(modelus)
 
 
 ```
-
+The model has high R^2 but the residual plot was not good.
 
 
 ```{r}
