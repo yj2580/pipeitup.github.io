@@ -7,9 +7,9 @@ output: pdf_document
 
 # EDA2
 ```{r}
-master_2 <- read_csv("~/Desktop/master 2.csv") 
+maindata <- read_csv("~/Desktop/master 2.csv") 
 
-  maindata = master_2 %>% 
+maindata <-  maindata %>% 
   janitor::clean_names() %>%
   select(-("hdi_for_year")) %>%
   mutate(suicideRate = (suicides_no/population)*100, 
@@ -17,10 +17,20 @@ master_2 <- read_csv("~/Desktop/master 2.csv")
          age=str_remove(age,"years"),
          gdp_for_year = as.numeric(gsub(",","",gdp_for_year)),
          age_group=as.factor(age),
-         suicides_no = as.numeric(suicides_no),
-         population = as.numeric(population),
+         suicides_no = as.integer(suicides_no),
+         population = as.integer(population),
          sex = as.factor(sex),
-         generation = as.factor(generation)) 
+         generation = as.factor(generation))
+
+
+maindata <- read_csv("maindata.csv")  %>%  filter(year!=2016) %>%   select(-1,-9,-14)
+
+maindata$year <- as.integer(maindata$year)
+
+maindata <- maindata %>% group_by(year,country,sex,age,population,gdp_per_capita) %>% summarise(suicides_no =  sum(suicides_no)) %>%  mutate("suicide_per_100k"=(suicides_no/population)*100000)
+
+
+write.csv(maindata, "maindata.csv",row.names = FALSE)
 ```
 
 

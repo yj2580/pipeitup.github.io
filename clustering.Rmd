@@ -6,31 +6,12 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2)
 library(broom)
 library(plotly)
 library(rworldmap)
-```
-
-```{r}
-master_2 <- read.csv("~/Desktop/master 2.csv") 
-
-  maindata = master_2 %>% 
-  janitor::clean_names() %>%
-  select(-("hdi_for_year")) %>%
-  mutate(suicideRate = (suicides_no/population)*100, 
-         country = as.factor(country),
-         age=str_remove(age,"years"),
-         gdp_for_year = as.numeric(gsub(",","",gdp_for_year)),
-         age_group=as.factor(age), 
-         suicides_no = as.numeric(suicides_no),
-         population = as.numeric(population),
-         sex = as.factor(sex),
-         generation = as.factor(generation))
-  
-
+library(dendextend)
 ```
 
 
@@ -51,7 +32,7 @@ The histogram below shows that a Euclidean distance of two is the most frequent 
 ```{r}
 hclust_subset1 <- hclust(dist_subset1, method = "complete")
 
-library(dendextend)
+
 
 subset1_dendrogram <- as.dendrogram(hclust_subset1)
 
@@ -85,8 +66,7 @@ subset2_lr
 
 ```{r}
 subset2_plot <- ggplot(subset2, aes(y=suicides_no, x=`gdp_for_year`, color = factor(cluster))) +
-                geom_point() +
-                geom_smooth(method = "lm", se = FALSE)
+                geom_point()
 
 subset2_plot
 ```
@@ -99,7 +79,7 @@ Since now we have 4 clusters, we should zoom in to see details in each cluster.
 ```{r}
 cluster1 <- subset2 %>%
                 filter(cluster ==  1) %>% 
-                     ggplot(aes(x = suicides_no, y = `gdp_for_year ($)`, color = sex)) +
+                     ggplot(aes(x = suicides_no, y = `gdp_for_year`, color = sex)) +
                          geom_point() +
                          scale_y_log10() +
                          scale_x_log10()

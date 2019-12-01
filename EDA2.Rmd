@@ -1,5 +1,5 @@
 ---
-title: "Prevalence trend and Determinants of Suicide Rates"
+title: "Prevalence Trend of Suicide Commitments"
 author: "Team Pipeitup"
 output: html_document
 ---
@@ -15,36 +15,44 @@ library(gganimate)
 library(transformr)
 library(corrplot)
 library(leaps)
+library(kableExtra)
 
-maindata <- read_csv("maindata.csv") %>% filter(year!=2016) %>% select(-1,-9,-14)
+maindata <- read_csv("maindata.csv")
 ```
 
-# Background
+# Introduction
 
-According to the World Health Organization, every year, about 800,000 people die due to suicide. In this project, we are wondering the trend of suicide rate across years. 
+According to the World Health Organization, every year, about 800,000 people die due to suicide. In this project, with a joint dataset from United Nations Development Program, World Bank, Kaggle, and World Health Organization, we examined current trend of Suicide Commitmennts. In particular, we are intrested in:
+
+- What's the general trend of suicide rate globally across the time.
+- Is there any gender difference in suicide rate across the time.
+- Is there any age difference in suicide rate across the time.
+- the relationship between the development of a country (GDP) and suicide rate across time.
 
 # Data
 
-The main dataset for our project is a combined dataset from summary datasets made by United Nations Development Program, World Bank, Kaggle, and World Health Organization. It can be access at [here](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016). The dataset has a size of `r nrow(maindata)` observations and `r ncol(maindata)` features. Features include:
+The main dataset for our project is a combined dataset from summary datasets made by United Nations Development Program, World Bank, Kaggle, and World Health Organization. It can be access at [here](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016). This dataset has a range from 1985 to 2016. However, since there are very few data in 2016, we will only keep the range from 1985 to 2015. The raw dataset has a size of `r nrow(maindata)` observations and `r ncol(maindata)` features. Basic features we are interested in include:
 
 - **Country**
 - **Year**: Year of the records
 - **Sex**:
 - **Age**: Age groups including "5-14", "15-24",  "25-34", "35-54", "55-74", and "75+".
 - **Suicides_no**: Amount of suicides
-- **Population**
-- **Suicides_100k_pop**: Amount of suicides over 100k
-- **Gdp_for_year**: GDP for a given year
-- **suicideRate**: Suicide Rate
 
-# Exploratory data analysis (EDA)
+Besides those, we will derive our main interested variable, **Suicides Per 100K** as **Suicides_no** divided by **Population** and mutiplied by 100,000. The sample of the final dataset is shown below:
 
-
+```{r,echo=FALSE}
+kable(head(maindata))
+```
 
 
-# General Findings
+# Statistical Analysis
 
-## Trend of Global Suicide Rate over time 
+Regression analysis will be the main method in our study.
+
+# Results
+
+## Global Trend of Suicide Per 100k Populationn over time 
 
 Before 1995, the suicide rate at the global level is increasing, but since then, it keeps decreasing.
 
@@ -66,7 +74,7 @@ p <- maindata %>%
 p + transition_reveal(year)
 ```
 
-## trend with sex
+## Global Trend of Suicide Per 100k Populationn by gender over time 
 
 We found that surprisingly, male has higher rate of suicide than female since 1985. Female suicide rate has a very stable trend throughout the history, while there were dramatic changes for male.
 
@@ -83,23 +91,28 @@ p <- maindata%>%
        color = "Sex") + 
   scale_x_continuous(breaks = seq(1985, 2015, 5), minor_breaks = F)
 
-
 p + transition_reveal(year)
 ```
 
-## trend with age
+## Global Trend of Suicide Per 100k Populationn by age over time 
 
 Suicide rates for the youngest age group nearly constant  and low over time. As the graph shown, elder groups have had higher suicide rate since 1985, and surprisingly such trend has not changed once.
 
 
 ```{r}
-p <- maindata %>% group_by(year, age) %>%
-  summarize(suicide_per_100k = (sum(as.numeric(suicides_no)) / sum(as.numeric(population))) * 100000) %>% 
-  ggplot(aes(year, suicide_per_100k, fill = age)) +
-  geom_density(stat = "identity",alpha=0.2) +
-  labs(y = "Suicide rate", title = "Suicide rates across age group over time")
+p <- maindata%>%
+  group_by(year, age) %>%
+  summarize(suicide_per_100k = (sum(as.numeric(suicides_no)) / sum(as.numeric(population))) * 100000) %>%
+  ggplot(aes(x = year, y = suicide_per_100k, col = factor(age))) + 
+  geom_line() + 
+  geom_point() + 
+  labs(title = "Trends Over Time, by Sex", 
+       x = "Year", 
+       y = "Suicides per 100k", 
+       color = "Sex") + 
+  scale_x_continuous(breaks = seq(1985, 2015, 5), minor_breaks = F)
 
-p
+p + transition_reveal(year)
 ```
 
 
@@ -108,29 +121,19 @@ p
 GDP has been viewed as a good measure about the development of a country. However, graph below shows that there are no obvious trend between GDP and suicide rate. Although GDPs across the world have been shifted toward larger direction, such trend persists.
 
 ```{r,echo=FALSE}
-interactiveplot = maindata %>%
-  select(gdp_per_capita,suicides_100k_pop, suicideRate, year, country,population) %>% 
-        ggplot(aes(x = gdp_per_capita, 
-                   y = suicideRate,
-                   size = population,
-                   frame = year,
-                   group = country)) +
-        geom_point(colour='#1050DC') +
-        scale_x_log10() + 
-        scale_alpha_continuous(range = c(0.4, 0.8)) + 
-        labs(title= "Suicide rates grouped by country from 1985 to 2016") +
-#        geom_hline(aes(yintercept = mean(suicides_per_100k)), color="gray") +
-        theme_minimal() +
-        xlab("GDP") +
-        ylab("Suicide Rate")
+p <- ggplot(maindata, aes(x = gdp_per_capita, y=suicide_per_100k, size = suicides_no, colour = country)) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+  scale_x_log10() +
+  labs(x = "GDP per capita", y = "suicides_100k_pop")
 
-plotly = ggplotly(interactiveplot, tooltip = c('country', 'population', 'suicides_per_100k', 'gdp_per_capita'))
-plotly
+p + transition_time(year) + labs(title = "Year: {frame_time}") + shadow_wake(wake_length = 0.1, alpha = FALSE)
 ```
 
 ## Countries with most suicides across the years
 
-```{r}
+```{r,echo=FALSE}
 
 suicide_sub<-maindata %>% select(country,year,sex,suicides_no)
 
@@ -143,13 +146,12 @@ country<-function(x){
 
 country_total<-sapply(n,function(x) country(x))
 
-df<-do.call(rbind,Map(data.frame,Country=n,Total_Suicides=country_total))
-df2<-df %>% arrange(desc(Total_Suicides))
-df3<-head(df2,n=10)
+df<-do.call(rbind,Map(data.frame,Country=n,Total_Suicides=country_total)) %>% arrange(desc(Total_Suicides)) %>% head(df2,n=10)
 
-top_suicide<-suicide_sub %>% filter(country==c('Russian Federation',
+top_suicide<- suicide_sub %>% filter(country %in% c('Russian Federation',
                                                'United States',
-                                               'Japan','France',
+                                               'Japan',
+                                               'France',
                                                'Ukraine',
                                                'Germany',
                                                'Republic of Korea',
@@ -157,15 +159,14 @@ top_suicide<-suicide_sub %>% filter(country==c('Russian Federation',
                                                'Poland',
                                                'United Kingdom'))
 
-top_suicide2<-top_suicide
-top_suicide2$sex<-as.factor(top_suicide2$sex)
+top_suicide$sex<-as.factor(top_suicide$sex)
 
-sm3<-aggregate(suicides_no~country+year,top_suicide2,sum)
+sm3<-aggregate(suicides_no~country+year,top_suicide,sum) %>% 
+  group_by(year) %>% 
+  mutate(rank = min_rank(-suicides_no)) %>%
+  ungroup()
 
-sm4<-sm3 %>% group_by(year) %>% mutate(rank = min_rank(-suicides_no) * 1) %>%
- ungroup()
-
-static_plot<-ggplot(sm4,aes(rank,group=country,fill=as.factor(country),color=as.factor(country))) +
+static_plot<-ggplot(sm3,aes(rank,group=country,fill=as.factor(country),color=as.factor(country))) +
  geom_tile(aes(y = suicides_no/2,height = suicides_no, width = 0.9), alpha = 0.8, color = NA) +
  geom_text(aes(y = 0, label = paste(country, ' ')), vjust = 0.2, hjust = 1) +
  geom_text(aes(y=suicides_no,label = paste(' ',suicides_no)), hjust=0)+
@@ -185,7 +186,6 @@ static_plot<-ggplot(sm4,aes(rank,group=country,fill=as.factor(country),color=as.
 
 plt<-static_plot + transition_states(states = year, transition_length = 4, state_length = 1) + 
  ease_aes('cubic-in-out') +
- #view_follow(fixed_x = TRUE) +
  labs(title = 'Total Suicides per Year : {closest_state}', 
  subtitle = 'Top 10 Countries',
  caption = 'Data Source: World Bank Data',
@@ -199,51 +199,36 @@ final_animation
 
 ## Inference
 
-### correlation for numeric variables
-
-```{r}
-# From the correlation plot on numeric variables, we can see that there are correlation between gdp for year, gdp per capita and population because the calculation of gdp per capita. Thus, in the model we included both gdp indicators but not the population because we think these two represents different things for comparison between countries.
-
-# cannot run 
-# errir nessgae:  Error in cor(corr_data) : 'x' must be numeric
-#corr_data = maindata %>% 
-#  select(-c(1,3,4,8,11,12,13)) 
-#corr= cor(corr_data)
-#corrplot(corr, type = "upper", order = "hclust", 
-#         tl.col = "black", tl.srt = 45)
-```
-
-```{r}
-# summary(maindata)
-hist(maindata$suicides_100k_pop)
-hist(maindata$gdp_for_year)
+```{r,echo=FALSE}
+hist(maindata$suicide_per_100k)
 suicide = maindata %>% 
-  mutate(suicides_100k_pop = suicides_100k_pop+1)
+  mutate(suicide_per_100k = suicide_per_100k+1)
 ```
 
 
-From the distribution plot of suicide_100k_pop, we can see that we need to transform it to satisfy the assumptions for linear model. we used log transformation and changed 0's to 0.01 for further calculations. Following graphs show the effect of transformation. 
+From the distribution plot of suicide_100k_pop, we can see that we need to transform it to satisfy the assumptions for linear model. we used log transformation and changed 0's to 0.01 for further calculations. Following graphs show that after transformation, the distribution has been much more normal than previous
 
-```{r}
-hist(log(maindata$suicides_100k_pop))
+```{r,echo=FALSE}
+hist(log(maindata$suicide_per_100k))
 ```
 
 
+```{r,echo=FALSE}
+maindata_log_y = maindata %>% 
+  mutate(log_suicide =log(suicide_per_100k))
+maindata_log_y$log_suicide[is.infinite(maindata_log_y$log_suicide)]=0.01
 
-### bigger model
-
-
-
-```{r}
-maindata_try = maindata %>% 
-  mutate(log_suicide =log(suicides_100k_pop))
-maindata_try$log_suicide[is.infinite(maindata_try$log_suicide)]=0.01
-
-model1=lm(log_suicide~year+sex*age+gdp_per_capita, data = maindata_try)
-
-plot(model1)
+model1=lm(log_suicide~year+sex*age+gdp_per_capita, data = maindata_log_y)
 summary(model1)
 ```
+
+
+
+```{r,echo=FALSE}
+plot(model1)
+```
+
+
 
 
 

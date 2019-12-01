@@ -15,7 +15,7 @@ library(plotly)
 library(R.utils)
 
 
-maindata <- read_csv("maindata.csv") %>% filter(year!=2016)
+maindata <- read_csv("maindata.csv")
 ```
 
 Column {.sidebar}
@@ -36,7 +36,7 @@ selectInput(
 radioButtons(
   "Metrics",
   label = h3("Metrics"),
-  choices = c("Total Amount","Ratio"),selected = "Total Amount"
+  choices = c("Total Amount","Suicide Per 100k"),selected = "Total Amount"
 )
 
 
