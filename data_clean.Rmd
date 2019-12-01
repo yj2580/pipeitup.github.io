@@ -1,0 +1,26 @@
+---
+title: "data_clean"
+author: "Yiling Yang"
+date: "11/30/2019"
+output: pdf_document
+---
+
+# EDA2
+```{r}
+master_2 <- read_csv("~/Desktop/master 2.csv") 
+
+  maindata = master_2 %>% 
+  janitor::clean_names() %>%
+  select(-("hdi_for_year")) %>%
+  mutate(suicideRate = (suicides_no/population)*100, 
+         country = as.factor(country),
+         age=str_remove(age,"years"),
+         gdp_for_year = as.numeric(gsub(",","",gdp_for_year)),
+         age_group=as.factor(age),
+         suicides_no = as.numeric(suicides_no),
+         population = as.numeric(population),
+         sex = as.factor(sex),
+         generation = as.factor(generation)) 
+```
+
+
