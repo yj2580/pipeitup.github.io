@@ -1,5 +1,5 @@
 ---
-title: "Homepage"
+title: "Prevalence Trend of Suicide Commitments"
 fontsize: 12pt
 output: html_document
 ---
@@ -31,8 +31,9 @@ Besides those, we will derive our main interested variable, **Suicides Per 100K*
 
 # Findings
 
-There are many interesting finds in our study. We first found that before 1995, the suicide rate at the global level is increasing, but since then, it keeps decreasing. The peak of the suicide rate among those 30 years was 1995. We also found that male has higher rate of suicide than female since 1985. Female suicide rate has a very stable trend throughout the history, while there were dramatic changes for male. As mentioned in the other graph, there is a peak in 1995 for the suiceide rate. For age groups effect, suicide rates for the youngest age group nearly constant  and low over time. As the graph shown, elder groups have had higher suicide rate since 1985, and surprisingly such trend has not changed once. For age groups 25-34, 35-54 and 55-74 had similar trends over those 30 years. GDP has been viewed as a good measure about the development of a country. However, graph below shows that there are no obvious trend between GDP and suicide rate. Although GDPs across the world have been shifted toward larger direction, such trend persists.
+There are many interesting finds in our study. We first found that before 1995, the suicide rate at the global level is increasing, but since then, it keeps decreasing. The peak of the suicide rate among those 30 years was 1995. We also found that male has higher rate of suicide than female since 1985. Female suicide rate has a very stable trend throughout the history, while there were dramatic changes for male.For age groups effect, suicide rates for the youngest age group nearly constant  and low over time. elder groups have had higher suicide rate since 1985, and surprisingly such trend has not changed once. For age groups 25-34, 35-54 and 55-74 had similar trends over those 30 years. GDP has been viewed as a good measure about the development of a country. However, graph below shows that there are no obvious trend between GDP and suicide rate. Although GDPs across the world have been shifted toward larger direction, such trend persists.
 
+Our regression model indicates that all our main effects (i.e. age_group, sex, GDP per capita) and the interaction term between age_group andsex are statistically significant. This indicates that there indeed are group difference by age and gender. As we purposed, gender can have different impacts on amount of suicides regarding different age group. An interesting find is that although there are no obvious trend between amount of suicides and GDP per capita based on graph, the regression output shows that GDP per capita does have a statitically significant effect on amount of suicides.
 
 # Discussion
 
