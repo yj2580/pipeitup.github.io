@@ -18,39 +18,20 @@ library(leaps)
 library(kableExtra)
 
 maindata <- read_csv("maindata.csv")
+
+knitr::opts_chunk$set(
+ echo = FALSE,
+ fig.width = 8, 
+ fig.height = 6,
+ fig.asp = 0.6,
+ out.width = "80%")
+theme_set(theme_bw() + 
+          theme(legend.position = "bottom",
+                legend.title = element_blank(),
+                plot.title = element_text(hjust = 0.5, size = 15),
+                plot.subtitle = element_text(hjust = 0.5, size = 12)))
 ```
 
-# Introduction
-
-According to the World Health Organization, every year, about 800,000 people die due to suicide. In this project, with a joint dataset from United Nations Development Program, World Bank, Kaggle, and World Health Organization, we examined current trend of Suicide Commitmennts. In particular, we are intrested in:
-
-- What's the general trend of suicide rate globally across the time.
-- Is there any gender difference in suicide rate across the time.
-- Is there any age difference in suicide rate across the time.
-- the relationship between the development of a country (GDP) and suicide rate across time.
-
-# Data
-
-The main dataset for our project is a combined dataset from summary datasets made by United Nations Development Program, World Bank, Kaggle, and World Health Organization. It can be access at [here](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016). This dataset has a range from 1985 to 2016. However, since there are very few data in 2016, we will only keep the range from 1985 to 2015. The raw dataset has a size of `r nrow(maindata)` observations and `r ncol(maindata)` features. Basic features we are interested in include:
-
-- **Country**
-- **Year**: Year of the records
-- **Sex**:
-- **Age**: Age groups including "5-14", "15-24",  "25-34", "35-54", "55-74", and "75+".
-- **Suicides_no**: Amount of suicides
-
-Besides those, we will derive our main interested variable, **Suicides Per 100K** as **Suicides_no** divided by **Population** and mutiplied by 100,000. The sample of the final dataset is shown below:
-
-```{r,echo=FALSE}
-kable(head(maindata))
-```
-
-
-# Statistical Analysis
-
-Regression analysis will be the main method in our study.
-
-# Results
 
 ## Global Trend of Suicide Per 100k Populationn over time 
 
@@ -138,9 +119,7 @@ After seen the trends, we researched about the year 1995 and ...
 We can see that United States, Russian Federation and Japan are the top 3 countries with highest suicides per year. US, Japan, and Germany (number 4 in the rank) have highest GDP rank as well. After researching, Russian Federation has high suicide rate might due to heavy alcoholic use, with an estimated half of all suicides correlated with alcohol abuse.
 
 ```{r,echo=FALSE}
-
 suicide_sub<-maindata %>% select(country,year,sex,suicides_no)
-
 
 n<-unique(suicide_sub$country)
 country<-function(x){
@@ -237,16 +216,5 @@ plot(model_try)
 
 For the significance of building a model for prediction, we used adjusted R squared as our criteria of selection. Thus, we built a larger model including country, sex, age, population, gdp_per_capita, and $sex*age$ as our predictors. The adjusted R squared is 0.746 for this model which means 74.6% of the variability of log suicide rate was explained by our model. However, since this model included more variables, so this model might be harder to interpret.
 
-# Discussion
-
-## Strength: 
-This study is a longitudinal study with a time spin of 30 years, which gives us more chance to explore the justifications and trends behand the data. 
-
-## Limitations: 
-First of all, there are only few variables that may related with suicide rate. However, there are other factors or latent factors that may reflected by suicide rate such as alcohol use. 
-
-Secondly, since we have done a global trend analysis, we need data from all over the world. However, this particular data set lacks the suicide information from Asia and  Africa. 
-
-Lastly, the data is not individual-leveled which may intervene our analysis for prediction purpose.
 
 

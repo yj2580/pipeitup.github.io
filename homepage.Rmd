@@ -1,0 +1,42 @@
+---
+title: "Homepage"
+fontsize: 12pt
+output: html_document
+---
+```{r,include=FALSE,message=FALSE,echo=FALSE}
+library(tidyverse)
+maindata <- read_csv("maindata.csv")
+```
+
+# Introduction
+
+Death by suicide is an extremely complex issue that causes pain to hundreds of thousands of people every year around the world. Globally, close to 800,000 people die from suicide every year. This makes it one of the leading causes of death globally which is in the top 15 list. If you are dealing with suicidal thoughts you can receive immediate help by visiting resources such as Suicide.org, or by calling 1-800-SUICIDE in the US. According to the World Health Organization, every year, about 800,000 people die due to suicide. In this project, with a joint dataset from United Nations Development Program, World Bank, Kaggle, and World Health Organization, we examined current trend of Suicide Commitmennts. In particular, we are intrested in:
+
+- What's the general trend of suicide rate globally across the time.
+- Is there any gender difference in suicide rate across the time.
+- Is there any age difference in suicide rate across the time.
+- the relationship between the development of a country (GDP) and suicide rate across time.
+
+# Data
+
+The main dataset for our project is a combined dataset from summary datasets made by United Nations Development Program, World Bank, Kaggle, and World Health Organization. It can be access at [here](https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016). This dataset has a range from 1985 to 2016. However, since there are very few data in 2016, we will only keep the range from 1985 to 2015. The raw dataset has a size of `r nrow(maindata)` observations and `r ncol(maindata)` features. Basic features we are interested in include:
+
+- **Country**
+- **Year**: Year of the records
+- **Sex**:
+- **Age**: Age groups including "5-14", "15-24",  "25-34", "35-54", "55-74", and "75+".
+- **Suicides_no**: Amount of suicides
+
+Besides those, we will derive our main interested variable, **Suicides Per 100K** as **Suicides_no** divided by **Population** and mutiplied by 100,000.
+
+# Findings
+
+There are many interesting finds in our study. We first found that before 1995, the suicide rate at the global level is increasing, but since then, it keeps decreasing. The peak of the suicide rate among those 30 years was 1995. We also found that male has higher rate of suicide than female since 1985. Female suicide rate has a very stable trend throughout the history, while there were dramatic changes for male. As mentioned in the other graph, there is a peak in 1995 for the suiceide rate. For age groups effect, suicide rates for the youngest age group nearly constant  and low over time. As the graph shown, elder groups have had higher suicide rate since 1985, and surprisingly such trend has not changed once. For age groups 25-34, 35-54 and 55-74 had similar trends over those 30 years. GDP has been viewed as a good measure about the development of a country. However, graph below shows that there are no obvious trend between GDP and suicide rate. Although GDPs across the world have been shifted toward larger direction, such trend persists.
+
+
+# Discussion
+
+A strength of this study is a longitudinal study with a time spin of 30 years, which gives us more chance to explore the justifications and trends behand the data. Meanwhile, there are many limitations future researchers need to be aware of. First of all, there are only few variables that may related with suicide rate. However, there are other factors or latent factors that may reflected by suicide rate such as alcohol use. Secondly, since we have done a global trend analysis, we need data from all over the world. However, this particular data set lacks the suicide information from Asia and  Africa. Lastly, the data is not individual-leveled which may intervene our analysis for prediction purpose.
+
+
+
