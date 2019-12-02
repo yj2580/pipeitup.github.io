@@ -3,6 +3,7 @@ title: "Prevalence Trend of Suicide Commitments"
 fontsize: 12pt
 output: html_document
 ---
+
 ```{r,include=FALSE,message=FALSE,echo=FALSE}
 library(tidyverse)
 maindata <- read_csv("maindata.csv")
@@ -23,7 +24,7 @@ The main dataset for our project is a combined dataset from summary datasets mad
 
 - **Country**
 - **Year**: Year of the records
-- **Sex**:
+- **Sex**
 - **Age**: Age groups including "5-14", "15-24",  "25-34", "35-54", "55-74", and "75+".
 - **Suicides_no**: Amount of suicides
 
