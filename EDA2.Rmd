@@ -19,10 +19,10 @@ library(leaps)
 library(kableExtra)
 knitr::opts_chunk$set(
  echo = FALSE,
- fig.width = 8, 
- fig.height = 6,
+ fig.width = 5, 
+ fig.height = 3.5,
  fig.asp = 0.6,
- out.width = "80%")
+ out.width = "50%")
 theme_set(theme_bw() + 
           theme(legend.position = "bottom",
                 legend.title = element_blank(),
@@ -37,7 +37,7 @@ maindata <- read_csv("maindata.csv")
 
 Before 1995, the suicide rate at the global level is increasing, but since then, it keeps decreasing. The peak of the suicide rate among those 30 years was 1995.
 
-```{r,echo=FALSE,fig.align='center',fig.height=7,fig.width=10}
+```{r,echo=FALSE,fig.align='center'}
 p <- maindata %>%
   group_by(year) %>%
   summarize(population = sum(population), 
@@ -59,7 +59,7 @@ p + transition_reveal(year)
 
 We found that surprisingly, male has higher rate of suicide than female since 1985. Female suicide rate has a very stable trend throughout the history, while there were dramatic changes for male. As mentioned in the other graph, there is a peak in 1995 for the suiceide rate.
 
-```{r}
+```{r,echo=FALSE,fig.align='center'}
 p <- maindata%>%
   group_by(year, sex) %>%
   summarize(suicide_per_100k = (sum(as.numeric(suicides_no)) / sum(as.numeric(population))) * 100000) %>%
@@ -80,7 +80,7 @@ p + transition_reveal(year)
 Suicide rates for the youngest age group nearly constant  and low over time. As the graph shown, elder groups have had higher suicide rate since 1985, and surprisingly such trend has not changed once. For age groups 25-34, 35-54 and 55-74 had similar trends over those 30 years.
 
 
-```{r}
+```{r,echo=FALSE,fig.align='center'}
 p <- maindata%>%
   group_by(year, age) %>%
   summarize(suicide_per_100k = (sum(as.numeric(suicides_no)) / sum(as.numeric(population))) * 100000) %>%
@@ -101,7 +101,7 @@ p + transition_reveal(year)
 
 GDP has been viewed as a good measure about the development of a country. However, graph below shows that there are no obvious trend between GDP and suicide rate. Although GDPs across the world have been shifted toward larger direction, such trend persists.
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,fig.align='center'}
 p <- ggplot(maindata, aes(x = gdp_per_capita, y=suicide_per_100k, size = suicides_no, colour = country)) +
   geom_point(show.legend = FALSE, alpha = 0.7) +
   scale_color_viridis_d() +
@@ -115,9 +115,16 @@ p + transition_time(year) + labs(title = "Year: {frame_time}") + shadow_wake(wak
 
 ## Countries with most suicides across the years
 
-We can see that United States, Russian Federation and Japan are the top 3 countries with highest suicides per year. US, Japan, and Germany (number 4 in the rank) have highest GDP rank as well. After researching, Russian Federation has high suicide rate might due to heavy alcoholic use, with an estimated half of all suicides correlated with alcohol abuse.
+We are also interested about the ranking of amount of suicides across the time. Below, we show the changing of the ranking across the time. Since there are too many, we will choose the top 20 countries with most total amount of suicide from 1985 to 2015. Those countries are:
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,fig.align='center'}
+top_20 <- maindata %>% group_by(country) %>% summarise(count=sum(suicides_no)) %>% arrange(desc(count)) %>% head(n=20)
+kable(top_20)
+```
+
+From graph graph below, we can see that United States, Russian Federation and Japan are the top 3 countries with highest suicides per year. US, Japan, and Germany (number 4 in the rank) have highest GDP rank as well. After researching, Russian Federation has high suicide rate might due to heavy alcoholic use, with an estimated half of all suicides correlated with alcohol abuse.
+
+```{r,echo=FALSE,fig.align='center'}
 suicide_sub<-maindata %>% select(country,year,sex,suicides_no)
 
 n<-unique(suicide_sub$country)
@@ -128,7 +135,27 @@ country<-function(x){
 
 country_total<-sapply(n,function(x) country(x))
 
-top_suicide<- suicide_sub 
+top_suicide<- suicide_sub %>% filter(country==c(
+  "Russian Federation",
+  "United States",
+  "Japan",
+  "France",
+  "Ukraine",
+  "Germany",
+  "Republic of Korea",
+  "Brazil",
+  "Poland",
+  "United Kingdom",
+  "Italy",
+  "Mexico",
+  "Canada",
+  "Thailand",
+  "Kazakhstan",
+  "Spain",
+  "Argentina",
+  "Hungary",
+  "Romania",
+  "Australia"))
 
 top_suicide$sex<-as.factor(top_suicide$sex)
 

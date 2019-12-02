@@ -69,12 +69,9 @@ par(mfrow=c(2,2))
 plot(model1)
 ```
 
-
-# Prediction
-
-Besides inference, we are also interested in building a model for prediction. Here, we tried all variable we have including country, sex, age, population, gdp_per_capita, and $sex*age$. Adjusted R squared was used as our criteria of selection. The adjusted R squared for the final model is 0.746 for this model, which means 74.6% of the variability of log suicide rate was explained by our model. However, since this model included more variables, so this model might be harder to interpret.
+Although country and population are not our main interests, we decided to fit a model with those variables in addition to those in previous model. The anova result indicates that at least one of country and population variable is statistically significant. However, due to its limited interpretability, we won't dig too much about this model.
 
 ```{r,echo=FALSE}
 model_try = lm(log_suicide~country+sex+age+population+gdp_per_capita+sex*age, data = maindata_log_y)
-#summary(model_try)
+anova(model_try,model1)
 ```
