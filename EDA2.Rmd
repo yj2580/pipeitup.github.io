@@ -2,9 +2,11 @@
 title: "Prevalence Trend of Suicide Commitments"
 author: "Team Pipeitup"
 output: html_document
+fontsize: 12pt
 ---
 
 ```{r,include=FALSE,message=FALSE,echo=FALSE}
+
 library(tidyverse)
 library(ggplot2)
 library(broom)
@@ -16,6 +18,17 @@ library(transformr)
 library(corrplot)
 library(leaps)
 library(kableExtra)
+knitr::opts_chunk$set(
+ echo = FALSE,
+ fig.width = 8, 
+ fig.height = 6,
+ fig.asp = 0.6,
+ out.width = "80%")
+theme_set(theme_bw() + 
+          theme(legend.position = "bottom",
+                legend.title = element_blank(),
+                plot.title = element_text(hjust = 0.5, size = 15),
+                plot.subtitle = element_text(hjust = 0.5, size = 12)))
 
 maindata <- read_csv("maindata.csv")
 
@@ -186,7 +199,7 @@ hist(log(maindata$suicide_per_100k))
 
 
 
-We chose year, sex, age, $sex*age$ and gdp_per_capita as our predictor for predicting log suicide rate. The reason behind the variable chosen process is that sex, age and GDP were our main interest at the beginning. We used $sex*age$ (the interaction term) because we think age and sex might interact together as effect measure of modifier or confounder. For example women in menopause might have higher suicide rate because of hormonal fluctuation. 
+We chose year, sex, age, $sex*age$ and gdp_per_capita as our predictor for predicting log suicide rate. The reason behind the variable chosen process is that sex, age and GDP were our main interest at the beginning. We used $sex*age$ (the interaction term) because we think age and sex might interact together as effect measure of modifier or confounder. For example women in menopause might have higher suicide rate because of hormonal fluctuation. From the plots, we can see that the residuals are mostly constant but there are 3 clusters(one on the left and two on the right); normality assumption is nearly held; there are about 3 outliers.
 
 
 
@@ -202,7 +215,9 @@ summary(model1)
 
 
 ```{r,echo=FALSE}
+par(mfrow=c(2,2))
 plot(model1)
+
 ```
 
 ## Prediction
@@ -211,10 +226,11 @@ plot(model1)
 model_try = lm(log_suicide~country+sex+age+population+gdp_per_capita+sex*age, data = maindata_log_y)
 anova(model_try)
 summary(model_try)$adj.r.squared
+par(mfrow=c(2,2))
 plot(model_try)
 ```
 
-For the significance of building a model for prediction, we used adjusted R squared as our criteria of selection. Thus, we built a larger model including country, sex, age, population, gdp_per_capita, and $sex*age$ as our predictors. The adjusted R squared is 0.746 for this model which means 74.6% of the variability of log suicide rate was explained by our model. However, since this model included more variables, so this model might be harder to interpret.
+For the significance of building a model for prediction, we used adjusted R squared as our criteria of selection. Thus, we built a larger model including country, sex, age, population, gdp_per_capita, and $sex*age$ as our predictors. The adjusted R squared is 0.746 for this model which means 74.6% of the variability of log suicide rate was explained by our model. However, since this model included more variables, so this model might be harder to interpret. From the plots, we can see that the residuals are mostly constantand better than the smaller model; normality assumption is nearly held ; there are about 3 outliers.
 
 
 
