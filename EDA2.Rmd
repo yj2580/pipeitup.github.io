@@ -54,7 +54,7 @@ Regression analysis will be the main method in our study.
 
 ## Global Trend of Suicide Per 100k Populationn over time 
 
-Before 1995, the suicide rate at the global level is increasing, but since then, it keeps decreasing.
+Before 1995, the suicide rate at the global level is increasing, but since then, it keeps decreasing. The peak of the suicide rate among those 30 years was 1995.
 
 ```{r,echo=FALSE,fig.align='center',fig.height=7,fig.width=10}
 p <- maindata %>%
@@ -76,7 +76,7 @@ p + transition_reveal(year)
 
 ## Global Trend of Suicide Per 100k Populationn by gender over time 
 
-We found that surprisingly, male has higher rate of suicide than female since 1985. Female suicide rate has a very stable trend throughout the history, while there were dramatic changes for male.
+We found that surprisingly, male has higher rate of suicide than female since 1985. Female suicide rate has a very stable trend throughout the history, while there were dramatic changes for male. As mentioned in the other graph, there is a peak in 1995 for the suiceide rate.
 
 ```{r}
 p <- maindata%>%
@@ -96,7 +96,7 @@ p + transition_reveal(year)
 
 ## Global Trend of Suicide Per 100k Populationn by age over time 
 
-Suicide rates for the youngest age group nearly constant  and low over time. As the graph shown, elder groups have had higher suicide rate since 1985, and surprisingly such trend has not changed once.
+Suicide rates for the youngest age group nearly constant  and low over time. As the graph shown, elder groups have had higher suicide rate since 1985, and surprisingly such trend has not changed once. For age groups 25-34, 35-54 and 55-74 had similar trends over those 30 years.
 
 
 ```{r}
@@ -130,8 +130,12 @@ p <- ggplot(maindata, aes(x = gdp_per_capita, y=suicide_per_100k, size = suicide
 
 p + transition_time(year) + labs(title = "Year: {frame_time}") + shadow_wake(wake_length = 0.1, alpha = FALSE)
 ```
+After seen the trends, we researched about the year 1995 and ...
+
 
 ## Countries with most suicides across the years
+
+We can see that United States, Russian Federation and Japan are the top 3 countries with highest suicides per year. US, Japan, and Germany (number 4 in the rank) have highest GDP rank as well. After researching, Russian Federation has high suicide rate might due to heavy alcoholic use, with an estimated half of all suicides correlated with alcohol abuse.
 
 ```{r,echo=FALSE}
 
@@ -206,10 +210,23 @@ suicide = maindata %>%
 ```
 
 
-From the distribution plot of suicide_100k_pop, we can see that we need to transform it to satisfy the assumptions for linear model. we used log transformation and changed 0's to 0.01 for further calculations. Following graphs show that after transformation, the distribution has been much more normal than previous
+From the distribution plot of suicide_100k_pop, we can see that we need to transform it to satisfy the assumptions for linear model. we used log transformation and changed 0's to 0.01 for further calculations. Following graphs show that after transformation, the distribution has been much more normal than the previous one.
 
 ```{r,echo=FALSE}
 hist(log(maindata$suicide_per_100k))
+```
+
+Then, we built a model 
+
+```{r}
+head(maindata)
+model_try = lm(log_suicide~country+sex+age+population+gdp_per_capita+sex*age, data = maindata_log_y)
+summary(model_try)
+anova(model_try)
+```
+
+```{r}
+plot(model_try)
 ```
 
 
