@@ -36,7 +36,7 @@ selectInput(
 radioButtons(
   "Metrics",
   label = h3("Metrics"),
-  choices = c("Total Amount","Suicide Per 100k"),selected = "Total Amount"
+  choices = c("Total Amount","Ratio"),selected = "Total Amount"
 )
 
 

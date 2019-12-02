@@ -146,18 +146,7 @@ country<-function(x){
 
 country_total<-sapply(n,function(x) country(x))
 
-df<-do.call(rbind,Map(data.frame,Country=n,Total_Suicides=country_total)) %>% arrange(desc(Total_Suicides)) %>% head(df2,n=10)
-
-top_suicide<- suicide_sub %>% filter(country %in% c('Russian Federation',
-                                               'United States',
-                                               'Japan',
-                                               'France',
-                                               'Ukraine',
-                                               'Germany',
-                                               'Republic of Korea',
-                                               'Brazil',
-                                               'Poland',
-                                               'United Kingdom'))
+top_suicide<- suicide_sub 
 
 top_suicide$sex<-as.factor(top_suicide$sex)
 
